@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>公共资源服务平台</title>
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+    </style>
+</head>
+<body class="loginback" onload="document.form.username.focus();">
+<div class="login-box">
+    <div class="box-left">
+        <div class="box-top"></div>
+        <div class="box-mid"></div>
+        <div class="box-bottom"><img th:src="@{/receptionAssets/loginImg/box-bottom.png}">version  1.03</div>
+    </div>
+    <div class="box-right">
+        <h1>欢迎登录</h1>
+        <form  name="form" th:action="@{/login}" method="POST" id="form_form_login">
+
+            <div class="row">
+                <span class="user"></span>
+                <input id="user-name" name="username" type="text" placeholder="请输入用户名"/>
+            </div>
+
+            <div class="row">
+                <span class="password"></span>
+                <input id="user-pwd" name="password" type="password" placeholder="请输入密码"/>
+            </div>
+            <button type="button" id="login" class="submit" >登 录</button>
+            <p class="error-tip-wrap"> <i class="am-icon-warning "></i> <span class="tipwords" th:text="${error}">请输入用户名和密码</span></p>
+        </form>
+
+        <div class="help">
+            <a href="#" style="float: left;">帮助中心</a>
+            <a href="#" style="float: right;">忘记密码？</a>
+
+        </div>
+    </div>
+
+</div>
+<div class="footer">
+    Copyright©2017 四川建设网有限责任公司 All Rights Reserved 。
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+//输入框动态效果
+$(function () {
+
+
+//提示框效果
+    var $errorTip = $('.error-tip-wrap');
+    var showTip = function (tipwords) {
+        $errorTip.show();
+        $('.tipwords').text(tipwords);
+    };
+
+//取值并提交
+    $('#login').on('click', function () {
+        var name=document.getElementById("user-name").value;
+        var pwd=document.getElementById("user-pwd").value;
+        if ((name==undefined|| name.trim()=='') || ( pwd==undefined || pwd.trim() == '')) {
+            showTip('请输入用户名和密码！');
+        }else {
+            document.getElementById("user-pwd").value=pwd;
+            document.getElementById("form_form_login").submit();
+        }
+    });
+
+//登录失败后，后台抛出的信息
+    var error=[[${error}]];
+    if((error!=undefined|| error.trim()!='')){
+        showTip(error);
+    }
+});
+
+/*]]>*/
+</script>
+</html>
