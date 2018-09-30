@@ -2,6 +2,7 @@ package com.example.gymproject.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -15,6 +16,10 @@ public class Course {
     private String endDate;
     private String state;
 
+    private String uuId;
+    private Object dateCollege;
+    private Object dateUser;
+    private String collid;
     @Id
     @Column(name = "fid", nullable = false, insertable = true, updatable = true, length = 128)
     public String getFid() {
@@ -82,6 +87,42 @@ public class Course {
 
     public void setState(String state) {
         this.state = state;
+    }
+    @Transient
+    public String getUuId() {
+        return uuId;
+    }
+
+    public void setUuId(String uuId) {
+        this.uuId = uuId;
+    }
+
+    @Transient
+    public Object getDateCollege() {
+        return dateCollege;
+    }
+
+    public void setDateCollege(Object dateCollege) {
+        this.dateCollege = dateCollege;
+    }
+
+    @Transient
+    public Object getDateUser() {
+        return dateUser;
+    }
+
+    public void setDateUser(Object dateUser) {
+        this.dateUser = dateUser;
+    }
+
+
+    @Transient
+    public String getCollid() {
+        return collid;
+    }
+
+    public void setCollid(String collid) {
+        this.collid = collid;
     }
 
     @Override

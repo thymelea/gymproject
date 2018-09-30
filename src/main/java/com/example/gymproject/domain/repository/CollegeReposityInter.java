@@ -15,4 +15,5 @@ public interface CollegeReposityInter  extends JpaRepository<College,String>, Jp
     List<College> findByFidAndAddressIsLikeAndAdminid(String id,String address,String adId);
     List<College> findByFidAndCollegenameIsLikeAndAddressIsLikeAndAdminid(String id,String name,String address,String adId);
 
+    List<College> findByFidIn(List<String> ids);
 }

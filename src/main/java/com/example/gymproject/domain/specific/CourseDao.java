@@ -7,4 +7,5 @@ import java.util.Map;
 
 public interface CourseDao {
     List<Course> findCoursrByUserId(Map<String,Object> dataMap);
+
 }

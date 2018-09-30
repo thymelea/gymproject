@@ -31,16 +31,22 @@ public class CourseReposityInterImpl implements CourseDao {
         String userId=(String)dataMap.get("userId");
         String state=(String)dataMap.get("state");
         String adminid=(String)dataMap.get("adminid");
-        sb.append("select co.fid,co.collegeid,co.cname,co.startdate,co.enddate,co.state FROM fcourse co ");
+        String uId="";
+        if(!StringUtils.isEmpty(state)){
+            uId=",u.fid ufid, coll.fid collid,uc.startdate,uc.enddate ";
+        }
+        sb.append("select co.fid,co.cname,co.state"+uId+" " +
+                "FROM fcourse co ");
         if(!StringUtils.isEmpty(state)){
             sb.append("INNER JOIN ucrelation uc ON co.fid=uc.fcourseId ");
             sb.append("INNER JOIN fuser u on u.fid=uc.fuserId ");
+            sb.append("INNER JOIN college coll on coll.fid = uc.collid ");
         }
         sb.append("where 1 = 1 ");
         if(!StringUtils.isEmpty(userId)){
             sb.append(" and u.fid = :userId ");
         }
-        sb.append(" and u.adminid = :adminid ");
+        sb.append(" and co.adminid = :adminid ");
 //        sb.append(" and co.startdate > :nowTime and co.enddate < :nowTime");
         Query query = entityManager.createNativeQuery(sb.toString());
 
@@ -56,19 +62,24 @@ public class CourseReposityInterImpl implements CourseDao {
                 Object[] o = (Object[]) obj;
                 Course course=new Course();
                 course.setFid(String.valueOf(o[0]));
-                course.setCollegeId(String.valueOf(o[1]));
-                course.setName(String.valueOf(o[2]));
-                String startDate="";
-                if(o[3]!=null){
-                    startDate= LocalDateTime.ofInstant(Instant.ofEpochMilli(((Timestamp) o[3]).getTime()), ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                course.setName(String.valueOf(o[1]));
+                course.setState(String.valueOf(o[2]));
+                if(!StringUtils.isEmpty(state)){
+                    course.setUuId(String.valueOf(o[3]));
+                    course.setCollid(String.valueOf(o[4]));
+                    String startDate="";
+                    if(o[5]!=null){
+                        startDate= ((Timestamp) o[5]).getTime()+"";
+                        startDate= startDate.substring(0,10);
+                    }
+                    course.setStartDate(startDate);
+                    String endDate="";
+                    if(o[6]!=null){
+                        endDate= ((Timestamp) o[6]).getTime()+"";
+                        endDate= endDate.substring(0,10);
+                    }
+                    course.setEndDate(endDate);
                 }
-                course.setStartDate(startDate);
-                String endDate="";
-                if(o[4]!=null){
-                    endDate= LocalDateTime.ofInstant(Instant.ofEpochMilli(((Timestamp) o[4]).getTime()), ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                }
-                course.setEndDate(endDate);
-                course.setState(String.valueOf(o[5]));
                 list.add(course);
             }
         }

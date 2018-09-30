@@ -10,5 +10,6 @@ public interface UserReposityInter extends JpaRepository<User,String>, JpaSpecif
         List<User> findByAdminId(String adminId);
         User findByName(String name);
         User findByFidAndAdminId(String fid,String aid);
+        List<User> findByFidIn(List<String> ids);
 
 }

@@ -24,4 +24,8 @@ public class CourseService {
     public void save(Course course){
         courseReposityInter.save(course);
     }
+
+    public List<Course> findCourseIdin(List<String> ids){
+       return courseReposityInter.findByFidIn(ids);
+    }
 }

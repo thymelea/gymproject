@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -102,8 +103,31 @@ public class GymController {
         dataMap.put("userId",userId);//用户id
         dataMap.put("state",state);//查询已约还是未约（0，已约；）
         dataMap.put("adminid",token);
-        List<Course> course=courseService.getCourseList(dataMap);
-            jsonlist = mapper.writeValueAsString(course);
+        List<Course> courses=courseService.getCourseList(dataMap);
+        List<String> uId=new ArrayList<>();
+        List<String> coll=new ArrayList<>();
+        for(Course course:courses){
+            uId.add(course.getUuId());
+            coll.add(course.getCollid());
+        }
+            List<College> collegeList=collegeService.findCollIdin(coll);
+            List<User> userList=userService.findUIdIn(uId);
+            for(Course course:courses){
+                if(collegeList!=null&&collegeList.size()>0)
+                for(College college:collegeList){
+                    if(course.getCollid().equals(college.getFid())){
+                        course.setDateCollege(college);
+                    }
+                }
+                if(userList!=null&&userList.size()>0)
+                for(User user:userList){
+                    if(course.getUuId().equals(user.getFid())){
+                        course.setDateUser(user);
+                    }
+                }
+            }
+
+            jsonlist = mapper.writeValueAsString(courses);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             logger.error("对象转json异常");
@@ -196,6 +220,7 @@ public class GymController {
             return "";
         }else{
             logger.info("填课程"+json);
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Map<String,Object> data = Utils.paramToMap(json);
                 String adminid=(String)data.get("token");
                 String collegeid=(String)data.get("collegeid");
@@ -207,8 +232,8 @@ public class GymController {
                 course.setAdminid(adminid);
                 course.setCollegeId(collegeid);
                 course.setName(cname);
-                course.setStartDate(startdate);
-                course.setEndDate(enddate);
+                course.setStartDate((simpleDateFormat.format(Long.valueOf(startdate)/1000L)));
+                course.setEndDate((simpleDateFormat.format(Long.valueOf(enddate)/1000L)));
                 course.setState("0");
                 courseService.save(course);
                 return "{\"msg\":\"不容易啊！有成功了\",\"code\":\"0\"}";
@@ -249,6 +274,7 @@ public class GymController {
         }else{
             logger.info(json);
             ObjectMapper mapper = new ObjectMapper();
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Map<String,Object> data = Utils.paramToMap(json);;
                 String userId=(String)data.get("userId");
                 String courseId=(String)data.get("courseId");
@@ -259,8 +285,8 @@ public class GymController {
                 relation.setFid(UUID.randomUUID().toString());
                 relation.setCourseId(courseId);
                 relation.setUserId(userId);
-                relation.setStartDate(startdate);
-                relation.setEndDate(enddate);
+                relation.setStartDate((simpleDateFormat.format(Long.valueOf(startdate)/1000L)));
+                relation.setEndDate((simpleDateFormat.format(Long.valueOf(enddate)/1000L)));
                 relation.setCollid(collegeid);
                 relationService.save(relation);
                 return "{\"msg\":\"success\",\"code\":\"0\"}";

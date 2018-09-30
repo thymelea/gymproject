@@ -4,6 +4,7 @@ import com.example.gymproject.domain.College;
 import com.example.gymproject.domain.repository.CollegeReposityInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -38,7 +39,13 @@ private CollegeReposityInter collegeReposityInter;
             return null;
         }
     }
+    @Transactional
     public void save(College collegeList){
         collegeReposityInter.save(collegeList);
     }
+
+    public List<College> findCollIdin(List<String> ids){
+            return collegeReposityInter.findByFidIn(ids);
+    }
+
 }

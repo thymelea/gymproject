@@ -27,6 +27,9 @@ public class UserService {
         }
         return this.userReposityInter.findByFidAndAdminId(userId,token);
     }
+    public List<User> findUIdIn(List<String> fids){
+       return userReposityInter.findByFidIn(fids);
+    }
 
     public List<User> getUserByAdmin(String adminId){
         return userReposityInter.findByAdminId(adminId);
