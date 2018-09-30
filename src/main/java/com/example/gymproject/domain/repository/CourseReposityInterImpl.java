@@ -67,18 +67,8 @@ public class CourseReposityInterImpl implements CourseDao {
                 if(!StringUtils.isEmpty(state)){
                     course.setUuId(String.valueOf(o[3]));
                     course.setCollid(String.valueOf(o[4]));
-                    String startDate="";
-                    if(o[5]!=null){
-                        startDate= ((Timestamp) o[5]).getTime()+"";
-                        startDate= startDate.substring(0,10);
-                    }
-                    course.setStartDate(startDate);
-                    String endDate="";
-                    if(o[6]!=null){
-                        endDate= ((Timestamp) o[6]).getTime()+"";
-                        endDate= endDate.substring(0,10);
-                    }
-                    course.setEndDate(endDate);
+                    course.setStartDate(String.valueOf(o[5]));
+                    course.setEndDate(String.valueOf(o[6]));
                 }
                 list.add(course);
             }

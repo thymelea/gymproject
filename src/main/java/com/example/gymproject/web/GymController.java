@@ -232,8 +232,6 @@ public class GymController {
                 course.setAdminid(adminid);
                 course.setCollegeId(collegeid);
                 course.setName(cname);
-                course.setStartDate((simpleDateFormat.format(Long.valueOf(startdate)/1000L)));
-                course.setEndDate((simpleDateFormat.format(Long.valueOf(enddate)/1000L)));
                 course.setState("0");
                 courseService.save(course);
                 return "{\"msg\":\"不容易啊！有成功了\",\"code\":\"0\"}";
@@ -273,8 +271,6 @@ public class GymController {
             return "";
         }else{
             logger.info(json);
-            ObjectMapper mapper = new ObjectMapper();
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Map<String,Object> data = Utils.paramToMap(json);;
                 String userId=(String)data.get("userId");
                 String courseId=(String)data.get("courseId");
@@ -285,8 +281,8 @@ public class GymController {
                 relation.setFid(UUID.randomUUID().toString());
                 relation.setCourseId(courseId);
                 relation.setUserId(userId);
-                relation.setStartDate((simpleDateFormat.format(Long.valueOf(startdate)/1000L)));
-                relation.setEndDate((simpleDateFormat.format(Long.valueOf(enddate)/1000L)));
+                relation.setStartDate(startdate);
+                relation.setEndDate(enddate);
                 relation.setCollid(collegeid);
                 relationService.save(relation);
                 return "{\"msg\":\"success\",\"code\":\"0\"}";
