@@ -192,7 +192,9 @@ public class GymController {
                 String yearold=(String)data.get("yearold");
                 String weight=(String)data.get("weight");
                 String height=(String)data.get("height");
+                String phone=(String)data.get("phone");
                 User user=new User();
+                
                 user.setFid(UUID.randomUUID().toString());
                 user.setAdminId(adminid);
                 user.setName(name);
@@ -200,6 +202,7 @@ public class GymController {
                 user.setYearold(yearold);
                 user.setWeight(weight);
                 user.setHeight(height);
+                user.setPhone(phone);
                 user.setState("0");
                 userService.addUser(user);
                 return "{\"msg\":\"恭喜你成功\",\"code\":\"0\"}";

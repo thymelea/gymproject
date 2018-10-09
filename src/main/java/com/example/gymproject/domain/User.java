@@ -14,6 +14,7 @@ public class User {
     private String weight;
     private String height;
     private String state;
+    private String phone;
 
     @Id
     @Column(name = "fid", nullable = false, insertable = true, updatable = true, length = 128)
@@ -94,6 +95,16 @@ public class User {
         this.state = state;
     }
 
+    @Basic
+    @Column(name = "phone", nullable = true, insertable = true, updatable = true, length = 52)
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,23 +113,27 @@ public class User {
         User user = (User) o;
 
         if (fid != null ? !fid.equals(user.fid) : user.fid != null) return false;
+        if (adminId != null ? !adminId.equals(user.adminId) : user.adminId != null) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (sex != null ? !sex.equals(user.sex) : user.sex != null) return false;
         if (yearold != null ? !yearold.equals(user.yearold) : user.yearold != null) return false;
         if (weight != null ? !weight.equals(user.weight) : user.weight != null) return false;
         if (height != null ? !height.equals(user.height) : user.height != null) return false;
-        return state != null ? state.equals(user.state) : user.state == null;
+        if (state != null ? !state.equals(user.state) : user.state != null) return false;
+        return phone != null ? phone.equals(user.phone) : user.phone == null;
     }
 
     @Override
     public int hashCode() {
         int result = fid != null ? fid.hashCode() : 0;
+        result = 31 * result + (adminId != null ? adminId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (sex != null ? sex.hashCode() : 0);
         result = 31 * result + (yearold != null ? yearold.hashCode() : 0);
         result = 31 * result + (weight != null ? weight.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
     }
 }
