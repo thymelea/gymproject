@@ -20,6 +20,7 @@ public class Course {
     private Object dateCollege;
     private Object dateUser;
     private String collid;
+    private String relid;
     @Id
     @Column(name = "fid", nullable = false, insertable = true, updatable = true, length = 128)
     public String getFid() {
@@ -123,6 +124,14 @@ public class Course {
 
     public void setCollid(String collid) {
         this.collid = collid;
+    }
+    @Transient
+    public String getRelid() {
+        return relid;
+    }
+
+    public void setRelid(String relid) {
+        this.relid = relid;
     }
 
     @Override

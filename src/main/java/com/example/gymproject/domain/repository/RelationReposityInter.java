@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface RelationReposityInter extends JpaRepository<Relation,String>, JpaSpecificationExecutor<Relation> {
+    Relation findByFid(String fid);
 }

@@ -7,12 +7,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +28,7 @@ public class CourseReposityInterImpl implements CourseDao {
         String adminid=(String)dataMap.get("adminid");
         String uId="";
         if(!StringUtils.isEmpty(state)){
-            uId=",u.fid ufid, coll.fid collid,uc.startdate,uc.enddate ";
+            uId=",u.fid ufid, coll.fid collid,uc.startdate,uc.enddate,uc.fid ucfid";
         }
         sb.append("select co.fid,co.cname,co.state"+uId+" " +
                 "FROM fcourse co ");
@@ -69,6 +64,7 @@ public class CourseReposityInterImpl implements CourseDao {
                     course.setCollid(String.valueOf(o[4]));
                     course.setStartDate(String.valueOf(o[5]));
                     course.setEndDate(String.valueOf(o[6]));
+                    course.setRelid(String.valueOf(o[7]));
                 }
                 list.add(course);
             }

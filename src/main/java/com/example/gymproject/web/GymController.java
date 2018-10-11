@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -49,7 +48,6 @@ public class GymController {
         ObjectMapper mapper = new ObjectMapper();
         response.addHeader("Content-Type", "application/json;charset=UTF-8");
         List<User> users=null;
-//        json="{\"mmm\":\"222\"}";
         String jsonlist="{\"msg\":\"false\",\"code\":\"9\"}";
         if(StringUtils.isEmpty(json)) {
             logger.info("查所有用户");
@@ -228,8 +226,6 @@ public class GymController {
                 String adminid=(String)data.get("token");
                 String collegeid=(String)data.get("collegeid");
                 String cname=(String)data.get("name");
-                String startdate=(String)data.get("startdate");
-                String enddate=(String)data.get("enddate");
                 Course course=new Course();
                 course.setFid(UUID.randomUUID().toString());
                 course.setAdminid(adminid);
@@ -267,6 +263,27 @@ public class GymController {
      * @param json
      * @return
      */
+    @RequestMapping(value = {"/delCourseForUser"}, method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public String delCourseForUser(HttpServletResponse response, HttpServletRequest request,@RequestBody String json){
+        response.addHeader("Content-Type", "application/json;charset=UTF-8");
+        if(StringUtils.isEmpty(json)){
+            return "";
+        }else{
+            logger.info("删除约课"+json);
+                Map<String,Object> data = Utils.paramToMap(json);
+                String relid=(String)data.get("relid");//id
+                relationService.delRe(relid);
+                return "{\"msg\":\"success\",\"code\":\"0\"}";
+
+        }
+    }
+    /**
+     * 为用户约课程
+     * @param response
+     * @param request
+     * @param json
+     * @return
+     */
     @RequestMapping(value = {"/addCourseForUser"}, method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public String addCourseForUser(HttpServletResponse response, HttpServletRequest request,@RequestBody String json){
         response.addHeader("Content-Type", "application/json;charset=UTF-8");
@@ -274,21 +291,33 @@ public class GymController {
             return "";
         }else{
             logger.info(json);
-                Map<String,Object> data = Utils.paramToMap(json);;
-                String userId=(String)data.get("userId");
-                String courseId=(String)data.get("courseId");
-                String startdate=(String)data.get("startdate");
-                String enddate=(String)data.get("enddate");
-                String collegeid=(String)data.get("collegeid");
-                Relation relation=new Relation();
-                relation.setFid(UUID.randomUUID().toString());
+            Map<String,Object> data = Utils.paramToMap(json);
+            String userId=(String)data.get("userId");
+            String courseId=(String)data.get("courseId");
+            String startdate=(String)data.get("startdate");
+            String enddate=(String)data.get("enddate");
+            String collegeid=(String)data.get("collegeid");
+            String relid=(String)data.get("relid");
+            Relation relation=null;
+            if(StringUtils.isEmpty(relid)) {
+                relation=new Relation();
+                relid=UUID.randomUUID().toString();
+            }else {
+                relation=relationService.findRe(relid);
+            }
+            relation.setFid(relid);
+            if(!StringUtils.isEmpty(courseId))
                 relation.setCourseId(courseId);
+            if(!StringUtils.isEmpty(userId))
                 relation.setUserId(userId);
+            if(!StringUtils.isEmpty(startdate))
                 relation.setStartDate(startdate);
+            if(!StringUtils.isEmpty(enddate))
                 relation.setEndDate(enddate);
+            if(!StringUtils.isEmpty(collegeid))
                 relation.setCollid(collegeid);
-                relationService.save(relation);
-                return "{\"msg\":\"success\",\"code\":\"0\"}";
+            relationService.save(relation);
+            return "{\"msg\":\"success\",\"code\":\"0\"}";
 
         }
     }
