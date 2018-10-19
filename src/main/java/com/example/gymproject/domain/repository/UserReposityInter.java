@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserReposityInter extends JpaRepository<User,String>, JpaSpecificationExecutor<User> {
         List<User> findByAdminId(String adminId);
-        User findByName(String name);
+        User findByNameAndAdminId(String name,String adminId);
         User findByFidAndAdminId(String fid,String aid);
         List<User> findByFidIn(List<String> ids);
 

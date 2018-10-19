@@ -39,8 +39,8 @@ public class UserService {
         userReposityInter.save(user);
     }
 
-    public User findUserByName(String name){
-        return userReposityInter.findByName(name);
+    public User findUserByNameAndAdminId(String name,String adminId){
+        return userReposityInter.findByNameAndAdminId(name,adminId);
     }
     @Transactional
     public void delete(String  relation){

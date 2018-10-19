@@ -182,7 +182,7 @@ public class GymController {
                 if(StringUtils.isEmpty(name)){
                     return "{\"msg\":\"请输入用户名\",\"code\":\"8\"}";
                 }
-                if(userService.findUserByName(name)!=null){
+                if(userService.findUserByNameAndAdminId(name,adminid)!=null){
                 logger.error("添加失败，用户已存在");
                 return "{\"msg\":\"用户已存在,更换用户名\",\"code\":\"6\"}";
                  }
